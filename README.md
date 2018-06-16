@@ -5,12 +5,12 @@ Notice that our code is tested on official [Tensorflow models@(commit fe2f8b01c6
 
 ## Installation
 - [Tensorflow](https://pypi.org/project/tf-nightly-gpu/):
-```bash
-pip install tf-nightly-gpu==1.5.0.dev20171102
-```
-- [Object Detection API](https://github.com/ringringyi/DOTA_models/tree/master/object_detection)
-  Follow the instructions in [Installation](https://github.com/ringringyi/DOTA_models/blob/master/object_detection/g3doc/installation.md)
-- [Development kit](https://github.com/CAPTAIN-WHU/DOTA_devkit)
+  ```bash
+      pip install tf-nightly-gpu==1.5.0.dev20171102
+  ```
+- [Object Detection API](https://github.com/ringringyi/DOTA_models/tree/master/object_detection)<br>
+  Follow the instructions in [Installation](https://github.com/ringringyi/DOTA_models/blob/master/object_detection/g3doc/installation.md).
+- [Development kit](https://github.com/CAPTAIN-WHU/DOTA_devkit)<br>
   You can easily install it following the instructions in [readme](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/readme.md).
 
 ## Preparing inputs
@@ -24,7 +24,7 @@ python create_dota_tf_record.py \
 ```
 The label map for DOTA data set can be found at `data/dota_label_map.pbtxt`.
 
-##Training
+## Training
 A local training job can be run with the following command:
 
 ```bash
@@ -36,10 +36,10 @@ python train.py \
 ```
 The pipline config file for DOTA data set can be found at `models/model/rfcn_resnet101_dota.config` or  `models/model/ssd608_inception_v2_dota608.config`.
 
-Here we train rfcn with image size of 1024*1024, ssd with image size of 608*608.Please refer to [DOTA_devkit/ImgSplit.py](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/ImgSplit.py) to split the picture and label. The trained models can be downloaded here: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg)
+Here we train rfcn with image size of 1024×1024, ssd with image size of 608×608. Please refer to [DOTA_devkit/ImgSplit.py](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/ImgSplit.py) to split the picture and label. The trained models can be downloaded here: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg).
 
-##Evaluation
-You can use the pre-trained models to test images. Modify paths in 'getresultfromtfrecord.py' and then run with the following commad:
+## Evaluation
+You can use the pre-trained models to test images. Modify paths in `getresultfromtfrecord.py` and then run with the following commad:
 ```bash
 # From tensorflow/models/object_detection/
 python getresultfromtfrecord.py
