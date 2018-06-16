@@ -1,0 +1,60 @@
+item {
+  id: 1
+  name: 'plane'
+}
+item {
+  id: 2
+  name: 'baseball-diamond'
+}
+item {
+  id: 3
+  name: 'bridge'
+}
+item {
+  id: 4
+  name: 'ground-track-field'
+}
+item {
+  id: 5
+  name: 'small-vehicle'
+}
+item {
+  id: 6
+  name: 'large-vehicle'
+}
+item {
+  id: 7
+  name: 'ship'
+}
+item {
+  id: 8
+  name: 'tennis-court'
+}
+item {
+  id: 9
+  name: 'basketball-court'
+}
+item {
+  id: 10
+  name: 'storage-tank'
+}
+item {
+  id: 11
+  name: 'soccer-ball-field'
+}
+item {
+  id: 12
+  name: 'roundabout'
+}
+item {
+  id: 13
+  name: 'harbor'
+}
+item {
+  id: 14
+  name: 'swimming-pool'
+}
+item {
+  id: 15
+  name: 'helicopter'
+}
