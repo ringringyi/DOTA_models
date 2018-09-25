@@ -36,9 +36,9 @@ python train.py \
 ```
 The pipline config file for DOTA data set can be found at `models/model/rfcn_resnet101_dota.config` or  `models/model/ssd608_inception_v2_dota608.config`.
 
-Here we train rfcn with image size of 1024×1024, ssd with image size of 608×608. Please refer to [DOTA_devkit/ImgSplit.py](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/ImgSplit.py) to split the picture and label. The trained models can be downloaded here: 
-Baidu Drive: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg)
-Google Drive: [rfcn](https://drive.google.com/open?id=1IIyTRcV1LcCqiyU1xTWftOnOD015ka2P), [ssd](https://drive.google.com/open?id=1Kt82V0PG4hJ6rCsFDnrhAGTbOw0v7xYK)
+Here we train rfcn with image size of 1024×1024, ssd with image size of 608×608. Please refer to [DOTA_devkit/ImgSplit.py](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/ImgSplit.py) to split the picture and label. The trained models can be downloaded here:<br>
+  Baidu Drive: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg)<br>
+  Google Drive: [rfcn](https://drive.google.com/open?id=1IIyTRcV1LcCqiyU1xTWftOnOD015ka2P), [ssd](https://drive.google.com/open?id=1Kt82V0PG4hJ6rCsFDnrhAGTbOw0v7xYK)
 
 ## Evaluation
 You can use the pre-trained models to test images. Modify paths in `getresultfromtfrecord.py` and then run with the following commad:
