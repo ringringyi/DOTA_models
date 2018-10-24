@@ -1,3 +1,11 @@
+r"""Convert raw PASCAL dataset to TFRecord for object_detection.
+
+Example usage:
+    python create_pascal_tf_record.py --data_dir=/data/DOTA/trainval \
+        --indexfile = trainval.txt
+        --output_name = dota_train.record
+"""
+
 import tensorflow as tf
 import utils.utils as util
 import sys
@@ -8,8 +16,10 @@ from object_detection.utils import dataset_util
 from object_detection.utils import label_map_util
 
 flags = tf.app.flags
-flags.DEFINE_string('data_dir', r'pathtodota', 'Root directory to raw bod dataset.')
-flags.DEFINE_string('label_map_path', r'',
+flags.DEFINE_string('data_dir', r'', 'Path to the data set to be converted.')
+flags.DEFINE_string('indexfile', 'train.txt', 'All the full path of the training set or test set.') # put it under the FLAGS.data_dir path.
+flags.DEFINE_string('output_name', 'dota_train.record', 'Path to output TFRecord')
+flags.DEFINE_string('label_map_path', r'data/dota_label_map.pbtxt',
                     'Path to label map proto')
 FLAGS = flags.FLAGS
 def create_tf_example(data,
@@ -20,18 +30,16 @@ def create_tf_example(data,
                       ):
   # TODO(user): Populate the following variables from your example.
 
-  full_path = os.path.join(imagepath, filename + '.jpg')
+  full_path = os.path.join(imagepath, filename + '.png')
   with tf.gfile.GFile(full_path, 'rb') as fid:
-    encoded_jpg = fid.read()
-  encoded_jpg_io = io.BytesIO(encoded_jpg)
-  image = PIL.Image.open(encoded_jpg_io)
-  if image.format != 'JPEG':
-    raise ValueError('Image format not JPEG')
+    encoded_png = fid.read()
+  encoded_png_io = io.BytesIO(encoded_png)
+  image = PIL.Image.open(encoded_png_io)
+  if image.format != 'PNG':
+    raise ValueError('Image format not PNG')
 
   width = 1024
   height = 1024
-  #width = 608
-  #height = 608
   image_format = None # b'jpeg' or b'png'
 
   xmins = [] # List of normalized left x coordinates in bounding box (1 per box)
@@ -83,8 +91,8 @@ def create_tf_example(data,
       'image/width': dataset_util.int64_feature(width),
       'image/filename': dataset_util.bytes_feature(filename.encode('utf8')),
       'image/source_id': dataset_util.bytes_feature(filename.encode('utf8')),
-      'image/encoded': dataset_util.bytes_feature(encoded_jpg),
-      'image/format': dataset_util.bytes_feature('jpeg'.encode('utf8')),
+      'image/encoded': dataset_util.bytes_feature(encoded_png),
+      'image/format': dataset_util.bytes_feature('png'.encode('utf8')),
       'image/object/bbox/xmin': dataset_util.float_list_feature(xmins),
       'image/object/bbox/xmax': dataset_util.float_list_feature(xmaxs),
       'image/object/bbox/ymin': dataset_util.float_list_feature(ymins),
@@ -95,44 +103,40 @@ def create_tf_example(data,
   #print 'tf_example: ', tf_example
   return tf_example
 
-def tf_write(testortrain, tf_records_name):
-    """
-    :param testortrain: This is the index file for training data and test data. Please put them under the FLAGS.Data_dir path.
-    :param tf_records_name:
-    :return:
-    """
-    writer = tf.python_io.TFRecordWriter(os.path.join(FLAGS.data_dir, 'tf_records', tf_records_name))
+def main(_):
+    data_dir = FLAGS.data_dir
+    indexfile = FLAGS.indexfile
+    if not os.path.exists(os.path.join(data_dir, indexfile)):
+        # print os.path.join(data_dir, indexfile)
+        raise ValueError('{} not in the path: {}'.format(indexfile, data_dir))
 
+    output_path = os.path.join(data_dir, 'tf_records')
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
+
+    writer = tf.python_io.TFRecordWriter(os.path.join(output_path, FLAGS.output_name))
     print ('start-------')
     # TODO(user): Write code to read in your dataset to examples variable
-    data_dir = FLAGS.data_dir
 
-    setname = os.path.join(data_dir, testortrain)
-    imagepath = os.path.join(data_dir, 'JPEGImages')
-    f = open(setname, 'r')
+    imagepath = os.path.join(data_dir, 'images')
+    f = open(os.path.join(data_dir, indexfile), 'r')
     lines = f.readlines()
-    txtlist = [x.strip().replace(r'JPEGImages', r'wordlabel').replace('.jpg', '.txt') for x in lines]
-    #txtlist = util.GetFileFromThisRootDir(os.path.join(data_dir, 'wordlabel'))
+    txtlist = [x.strip().replace(r'images', r'labelTxt').replace('.png', '.txt') for x in lines]
+    # txtlist = util.GetFileFromThisRootDir(os.path.join(data_dir, 'wordlabel'))
     for fullname in txtlist:
         data = util.parse_bod_rec(fullname)
-        #print 'len(data):', len(data)
-        #print 'data:', data
-        #assert len(data) >= 0, "there exists empty data: " + fullname
+        # print 'len(data):', len(data)
+        # print 'data:', data
+        # assert len(data) >= 0, "there exists empty data: " + fullname
         basename = os.path.basename(os.path.splitext(fullname)[0])
         label_map_dict = label_map_util.get_label_map_dict(FLAGS.label_map_path)
-        #print 'label_map_dict', label_map_dict
+        # print 'label_map_dict', label_map_dict
         tf_example = create_tf_example(data,
                                        imagepath,
                                        label_map_dict,
                                        basename)
         writer.write(tf_example.SerializeToString())
     writer.close()
-
-def main(_):
-    tf_write('test.txt', 'dota_test.record')
-    tf_write('train.txt', 'dota_train.record')
-    #tf_write('test.txt', 'dota_test_608.record')
-    #tf_write('train.txt', 'dota_train_608.record')
 
 if __name__ == '__main__':
   tf.app.run()

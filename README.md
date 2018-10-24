@@ -9,7 +9,7 @@ Notice that our code is tested on official [Tensorflow models@(commit fe2f8b01c6
       pip install tf-nightly-gpu==1.5.0.dev20171102
   ```
 - [Object Detection API](https://github.com/ringringyi/DOTA_models/tree/master/object_detection)<br>
-  Follow the instructions in [Installation](https://github.com/ringringyi/DOTA_models/blob/master/object_detection/g3doc/installation.md).
+  Follow the instructions in [Installation](https://github.com/ringringyi/DOTA_models/blob/master/object_detection/g3doc/installation.md). Note the version of Protobuf.
 - [Development kit](https://github.com/CAPTAIN-WHU/DOTA_devkit)<br>
   You can easily install it following the instructions in [readme](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/readme.md).
 
@@ -19,10 +19,25 @@ below:
 ```bash
 # From tensorflow/models/object_detection/
 python create_dota_tf_record.py \
+    --data_dir=/your/path/to/dota/train \
+    --indexfile = train.txt \
+    --output_name = dota_train.record \
     --label_map_path=data/dota_label_map.pbtxt \
-    --data_dir=/path/to/dota/
 ```
-The label map for DOTA data set can be found at `data/dota_label_map.pbtxt`.
+The subdirectory of "data_dir" is in the structure of
+```
+data_dir
+    ├── images
+    └── labelTxt
+    └── indexfile
+```
+Here the indexfile contains the full path of all images to convert, such as `train.txt` or `test.txt`. Its format is shown below.
+```
+/your/path/to/dota/train/images/P2033__1__0___0.png
+/your/path/to/dota/train/images/P2033__1__0___595.png
+...
+```
+And the output path of tf_record is also under "data_dir", you can easily find it in `data_dir/tf_records/`
 
 ## Training
 A local training job can be run with the following command:
@@ -34,11 +49,11 @@ python train.py \
     --pipeline_config_path=${PATH_TO_YOUR_PIPELINE_CONFIG} \
     --train_dir=${PATH_TO_TRAIN_DIR}
 ```
-The pipline config file for DOTA data set can be found at `models/model/rfcn_resnet101_dota.config` or  `models/model/ssd608_inception_v2_dota608.config`.
+The pipline config file for DOTA data set can be found at `models/model/rfcn_resnet101_dota.config` or  `models/model/ssd608_inception_v2_dota608.config`. You need to replace some paths in it with your own paths.
 
 Here we train rfcn with image size of 1024×1024, ssd with image size of 608×608. Please refer to [DOTA_devkit/ImgSplit.py](https://github.com/CAPTAIN-WHU/DOTA_devkit/blob/master/ImgSplit.py) to split the picture and label. The trained models can be downloaded here:<br>
-  Baidu Drive: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg)<br>
-  Google Drive: [rfcn](https://drive.google.com/open?id=1IIyTRcV1LcCqiyU1xTWftOnOD015ka2P), [ssd](https://drive.google.com/open?id=1Kt82V0PG4hJ6rCsFDnrhAGTbOw0v7xYK)
+* Baidu Drive: [rfcn](https://pan.baidu.com/s/15fFYrffdF94UzA5tYq6ToQ), [ssd](https://pan.baidu.com/s/1Gg4KYlqBtyp83DHJW1qTxg)<br>
+* Google Drive: [rfcn](https://drive.google.com/open?id=1IIyTRcV1LcCqiyU1xTWftOnOD015ka2P), [ssd](https://drive.google.com/open?id=1Kt82V0PG4hJ6rCsFDnrhAGTbOw0v7xYK)
 
 ## Evaluation
 You can use the pre-trained models to test images. Modify paths in `getresultfromtfrecord.py` and then run with the following commad:
