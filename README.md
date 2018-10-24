@@ -20,8 +20,8 @@ below:
 # From tensorflow/models/object_detection/
 python create_dota_tf_record.py \
     --data_dir=/your/path/to/dota/train \
-    --indexfile = train.txt \
-    --output_name = dota_train.record \
+    --indexfile=train.txt \
+    --output_name=dota_train.record \
     --label_map_path=data/dota_label_map.pbtxt \
 ```
 The subdirectory of "data_dir" is in the structure of
