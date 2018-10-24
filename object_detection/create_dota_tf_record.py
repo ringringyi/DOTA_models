@@ -1,9 +1,9 @@
 r"""Convert raw PASCAL dataset to TFRecord for object_detection.
 
 Example usage:
-    python create_pascal_tf_record.py --data_dir=/data/DOTA/trainval \
-        --indexfile = trainval.txt
-        --output_name = dota_train.record
+    python create_pascal_tf_record.py --data_dir=/data/dota/train/ \
+        --indexfile=train.txt
+        --output_name=dota_train.record
 """
 
 import tensorflow as tf
